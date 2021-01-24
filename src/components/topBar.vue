@@ -1,8 +1,6 @@
 <template>
   <v-container>
-    <h2 class="mr-2"> {{ coin.FullName }}</h2>
   </v-container>
-
 </template>
 
 <script>

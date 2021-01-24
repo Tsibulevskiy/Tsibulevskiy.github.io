@@ -8,11 +8,12 @@ export default new Vuex.Store({
   state: {
     baseUrl: 'https://min-api.cryptocompare.com/data',
     apiKey: 'c7672ea88ee9152b9af099d43dd030eb08a058188eea47ad0ee1375370c39e17',
+    baseWs: 'wss://streamer.cryptocompare.com/v2?api_key=',
     coinList: '',
     coin: '',
     labels: [],
     value: [],
-    coinPrice: ''
+    fsym: 'BTC'
   },
   mutations: {
     coinList (state, payload) {
@@ -27,8 +28,8 @@ export default new Vuex.Store({
     coinInfo (state, payload) {
       state.coin = payload
     },
-    coinPrice (state, payload) {
-      state.coinPrice = payload
+    fsym (state, payload) {
+      state.fsym = payload
     }
   },
   actions: {
@@ -78,38 +79,21 @@ export default new Vuex.Store({
           })
       })
     },
-    price ({ commit, state }, payload) {
-      return new Promise((resolve, reject) => {
-        axios.get(state.baseUrl + '/price', {
-          params: {
-            fsym: payload,
-            tsyms: 'USD,JPY,EUR'
-          },
-          headers: {
-            'Content-Type': 'application/json',
-            'authorization': 'Apikey ' + state.apiKey
-          }
-        })
-          .then((response) => {
-            commit('coinPrice', response.data)
-            resolve(response.data)
-          })
-          .catch((error) => {
-            console.log(error)
-            reject(error)
-          })
-      })
-    },
     coin_info ({ commit }, payload) {
       commit('coinInfo', payload)
+    },
+    fsym ({commit}, payload) {
+      commit('fsym', payload)
     }
   },
   getters: {
     getBaseUrl: (state) => state.baseUrl,
+    getBaseWs: (state) => state.baseWs,
+    getApiKey: (state) => state.apiKey,
     getCoinList: (state) => state.coinList,
     getCoin: (state) => state.coin,
     getLabels: (state) => state.labels,
     getValue: (state) => state.value,
-    getCoinPrice: (state) => state.coinPrice
+    getFsym: (state) => state.fsym
   }
 })

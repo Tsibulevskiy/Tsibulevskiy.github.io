@@ -29,6 +29,7 @@
 
 <script>
 export default {
+
   computed: {
     coinList () {
       return this.$store.getters.getCoinList.Data
@@ -42,9 +43,10 @@ export default {
       this.$store.dispatch('coin_list')
     },
     getCoin (coin) {
+      this.$root.$emit('sendRemove', this.$store.getters.getFsym)
       this.$store.dispatch('coin', coin.CoinInfo.Name)
-      this.$store.dispatch('coin_info', coin.CoinInfo)
-      this.$store.dispatch('price', coin.CoinInfo.Name)
+      this.$store.dispatch('fsym', coin.CoinInfo.Name)
+      this.$root.$emit('sendAdd', coin.CoinInfo.Name)
     }
   }
 }
