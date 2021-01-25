@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h2 v-if="fsym">{{ fsym }} {{old_fsym}}</h2>
+    <h2 v-if="fsym">{{ fsym }}</h2>
     <v-row>
       <v-col cols="12" cm="4" md="4">
         <v-card elevation="2" v-if="coin_info" class="coin pl-2">
@@ -54,6 +54,24 @@
             </v-sparkline>
           </v-sheet>
         </v-card>
+        <v-card color="grey lighten-4" class="mt-4"
+                max-width="900">
+          <v-sheet color="transparent"
+                   class="v-sheet--offset mx-auto"
+                   elevation="12"
+                   max-width="calc(100% - 32px)">
+            <v-sparkline
+              :smooth="16"
+              :gradient="['#f72047', '#ffd200', '#1feaea']"
+              :line-width="2"
+              :value="price"
+              :labels="time_value"
+              auto-draw
+              label-size="3"
+              stroke-linecap="round">
+            </v-sparkline>
+          </v-sheet>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -82,8 +100,11 @@ export default {
     fsym () {
       return this.$store.getters.getFsym
     },
-    old_fsym () {
-      return this.$store.getters.getOldFsym
+    price () {
+      return this.$store.getters.getPrice
+    },
+    time_value () {
+      return this.$store.getters.getTime
     },
     value () {
       return this.$store.getters.getValue
@@ -103,6 +124,8 @@ export default {
       const data = JSON.parse(event.data)
       if (data.TYPE && data.TYPE === '5') {
         this.coin_info = data
+        wm.$store.dispatch('price', data.PRICE)
+        wm.$store.dispatch('time', moment(data.LASTUPDATE).format('h:mm:ss p'))
         // console.log(data)
       }
     }
@@ -125,7 +148,6 @@ export default {
         "action": message,
         "subs": ["5~CCCAGG~" + value + "~USD"]
       }
-      console.log(subRequest)
       this.connection.send(JSON.stringify(subRequest))
       this.connection.send(message)
     },

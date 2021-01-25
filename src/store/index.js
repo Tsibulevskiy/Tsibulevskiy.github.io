@@ -13,7 +13,9 @@ export default new Vuex.Store({
     coin: '',
     labels: [],
     value: [],
-    fsym: 'BTC'
+    fsym: 'BTC',
+    price: [],
+    time: []
   },
   mutations: {
     coinList (state, payload) {
@@ -30,6 +32,21 @@ export default new Vuex.Store({
     },
     fsym (state, payload) {
       state.fsym = payload
+    },
+    price (state, payload) {
+      if (payload) {
+        if (state.price.length < 15) {
+          state.price.push(payload)
+        } else {
+          state.price.shift()
+          state.price.push(payload)
+        }
+      }
+    },
+    time (state, payload) {
+      if (payload) {
+        state.time.push(payload)
+      }
     }
   },
   actions: {
@@ -69,7 +86,6 @@ export default new Vuex.Store({
           }
         })
           .then((response) => {
-            console.log(response.data.Data.Data)
             commit('coinLabels', response.data.Data.Data)
             commit('coinValue', response.data.Data.Data)
             resolve(response.data)
@@ -85,6 +101,12 @@ export default new Vuex.Store({
     },
     fsym ({commit}, payload) {
       commit('fsym', payload)
+    },
+    price ({commit}, payload) {
+        commit('price', payload)
+    },
+    time ({commit}, payload) {
+      commit('time', payload)
     }
   },
   getters: {
@@ -95,6 +117,8 @@ export default new Vuex.Store({
     getCoin: (state) => state.coin,
     getLabels: (state) => state.labels,
     getValue: (state) => state.value,
-    getFsym: (state) => state.fsym
+    getFsym: (state) => state.fsym,
+    getPrice: (state) => state.price,
+    getTime: (state) => state.time
   }
 })
