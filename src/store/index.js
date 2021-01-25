@@ -69,6 +69,7 @@ export default new Vuex.Store({
           }
         })
           .then((response) => {
+            console.log(response.data.Data.Data)
             commit('coinLabels', response.data.Data.Data)
             commit('coinValue', response.data.Data.Data)
             resolve(response.data)

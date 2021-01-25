@@ -54,24 +54,6 @@
             </v-sparkline>
           </v-sheet>
         </v-card>
-        <v-card color="grey lighten-4" class="mt-4"
-                max-width="900">
-          <v-sheet color="transparent"
-                   class="v-sheet--offset mx-auto"
-                   elevation="12"
-                   max-width="calc(100% - 32px)">
-            <v-sparkline
-                    :smooth="16"
-                    :gradient="['#f72047', '#ffd200', '#1feaea']"
-                    :line-width="2"
-                    :value="value"
-                    :labels="labels"
-                    auto-draw
-                    label-size="3"
-                    stroke-linecap="round">
-            </v-sparkline>
-          </v-sheet>
-        </v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -121,7 +103,7 @@ export default {
       const data = JSON.parse(event.data)
       if (data.TYPE && data.TYPE === '5') {
         this.coin_info = data
-        console.log(data)
+        // console.log(data)
       }
     }
     this.connection.onopen = () => wm.sendMessage(this.subAdd)
@@ -149,7 +131,7 @@ export default {
     },
     time(val) {
       return moment(val)
-    },
+    }
   }
 }
 </script>
